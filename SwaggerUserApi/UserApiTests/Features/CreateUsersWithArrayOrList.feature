@@ -1,9 +1,15 @@
-﻿Feature: Create users With Array
-	Create several users by array endpoint
+﻿Feature: Create users with array or list
+	Create several users with array or list endpoints
 
 @mytag
-Scenario: Add two numbers
-	Given the first number is 50
-	And the second number is 70
-	When the two numbers are added
-	Then the result should be 120
+Scenario: Create users with array endpoint
+	Given path "/user/createWithArray"
+	And request body for users array
+	When method is POST
+	Then users are created and response is correct
+
+Scenario: Create users with list endpoint
+	Given path "/user/createWithList"
+	And request body for users array
+	When method is POST
+	Then users are created and response is correct
