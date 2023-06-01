@@ -14,7 +14,11 @@ namespace UserApiTests.Support
         public StringContent? RequestBody;
         public string? ResponseBody;
         public HttpResponseMessage? response;
-        
+
+        protected string searchingUsername = "Mick666";
+        protected string usernameForDeleting = "Faker";
+        protected string searchingPassword = "1933zxc";
+
         public CommonData() 
         {
             _hostName = "https://petstore.swagger.io/v2";

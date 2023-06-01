@@ -15,11 +15,17 @@ namespace UserApiTests.StepDefinitions
         [Given(@"path ""([^""]*)""")]
         public void GivenPathHttps(string endpoint)
         {
+            Url = _hostName + endpoint;
+        }
+
+        [Given(@"update user ""([^""]*)""")]
+        public void GivenUpdateUser(string endpoint)
+        {
             Regex regex = new Regex("{username}");
 
             if (regex.IsMatch(endpoint))
-                endpoint = endpoint.Replace("{username}", "John123");
-            
+                endpoint = endpoint.Replace("{username}", searchingUsername);
+
             Url = _hostName + endpoint;
         }
 
@@ -55,6 +61,19 @@ namespace UserApiTests.StepDefinitions
             }
         }
 
+        [When(@"method is PUT")]
+        public async Task WhenMethodIsPUT()
+        {
+            try
+            {
+                response = await HttpClient.PutAsync(Url, RequestBody);
+                ResponseBody = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception message: {ex.Message}, StackTrace: {ex.StackTrace}");
+            }
+        }
 
         [Then(@"user is created and response is correct")]
         public void ThenUserIsCreatedAndResponseIsCorrect()
@@ -73,6 +92,21 @@ namespace UserApiTests.StepDefinitions
 
         [Then(@"users are created and response is correct")]
         public void ThenUsersAreCreatedAndResponseIsCorrect()
+        {
+            try
+            {
+                Assert.IsTrue(response.IsSuccessStatusCode);
+                if (!ResponseBody.Contains("type"))
+                    Assert.Fail();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception message: {ex.Message}, StackTrace: {ex.StackTrace}");
+            }
+        }
+
+        [Then(@"username updated successfully and status code is correct")]
+        public void ThenUsernameUpdatedSuccessfullyAndStatusCodeIsCorrect()
         {
             try
             {
